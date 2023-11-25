@@ -1,0 +1,15 @@
+{
+  "name": "git-project",
+  "version": "1.0.0",
+  "description": "Team Member:\r Fuzakis (Fuad Zaki Nurrahman: 5322600011) <br>\r deswicinta (Putri Deswicyntari Islami :532260014) <br>\r Wildan (Mochammad Wildan Syahputra: 5322600012) <br>",
+  "main": "ffmpeg.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@ffmpeg/ffmpeg": "^0.12.7"
+  }
+}
