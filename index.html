@@ -30,17 +30,19 @@
         <button id="downloadButton" onclick="downloadEditedAudio()" style="display: none;">Download Edited Audio</button>
         <div id="result"></div>
     </div>
-    
 
-    <script src="script.js">
+    <script src="script.js"></script>
+    <script>
+        const resultElement = document.getElementById('result');
+        
         resultElement.innerHTML = `
-    <p>${error.message}</p>
-    <button onclick="clearResult()">Clear Result</button>
-    `;
+            <p>${error.message}</p>
+            <button onclick="clearResult()">Clear Result</button>
+        `;
 
-    window.clearResult = () => {
-    resultElement.innerHTML = '';
-    };
+        window.clearResult = () => {
+            resultElement.innerHTML = '';
+        };
     </script>
 </body>
 

@@ -1,7 +1,13 @@
+import { FFmpeg } from '@ffmpeg/ffmpeg';
+import { fetchFile } from '@ffmpeg/util';
+
 document.addEventListener('DOMContentLoaded', () => {
     const appElement = document.getElementById('app');
     const downloadButton = document.getElementById('downloadButton');
     const resultElement = document.getElementById('result');
+    const audioRef = document.getElementById('audioPlayer');
+    const { createWorker } = FFmpeg;
+    const worker = createWorker({ workerPath: 'ffmpeg-core.js' }); // Sesuaikan dengan nama file yang benar
 
     window.performAction = async () => {
         const action = document.getElementById('action').value;
@@ -11,27 +17,44 @@ document.addEventListener('DOMContentLoaded', () => {
         const audioFile = audioFileInput.files[0];
 
         try {
-            const editedAudioBlob = await performAudioEditing(audioFile, action, startTime, endTime);
+            const allowedExtensions = ['mp3', 'wav'];
+            const fileExtension = audioFile.name.split('.').pop().toLowerCase();
 
-            // Tampilkan tombol unduh
+            if (!allowedExtensions.includes(fileExtension)) {
+                throw new Error('Invalid audio format. Please upload an MP3 or WAV file.');
+            }
+
+            const editedAudioBlob = await performAudioEditing(audioFile, action, startTime, endTime, fileExtension);
+
             downloadButton.style.display = 'block';
 
             resultElement.innerHTML = `
                 <p>Action completed successfully!</p>
                 <button onclick="downloadEditedAudio()">Download Edited Audio</button>
                 <button onclick="playEditedAudio()">Play Edited Audio</button>
-                <audio controls id="audioPlayer">
-                    <source src="${URL.createObjectURL(editedAudioBlob)}" type="audio/mpeg">
-                    Your browser does not support the audio element.
-                </audio>
             `;
 
-            // Simpan blob audio hasil editing untuk diunduh
             window.editedAudioBlob = editedAudioBlob;
         } catch (error) {
             console.error('Error:', error);
             resultElement.innerHTML = `Error processing audio: ${error.message}`;
+        } finally {
+            if (worker) {
+                await worker.terminate();
+            }
         }
+    };
+
+    const performAudioEditing = async (audioFile, action, startTime, endTime, fileExtension) => {
+        await worker.load();
+        await worker.write('input.' + fileExtension, audioFile);
+
+        // ...
+
+        const { data } = await worker.seek(startTime).output('output.mp3').run();
+        const editedAudioBlob = new Blob([data], { type: 'audio/mpeg' });
+
+        return editedAudioBlob;
     };
 
     window.downloadEditedAudio = () => {
@@ -43,28 +66,11 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     window.playEditedAudio = () => {
-        const audioPlayer = document.getElementById('audioPlayer');
-        audioPlayer.play();
+        audioRef.play();
     };
 
     window.clearResult = () => {
         resultElement.innerHTML = '';
-        downloadButton.style.display = 'none'; // Sembunyikan tombol unduh ketika hasil dihapus
-    };
-
-    // Fungsi performAudioEditing tetap sama seperti sebelumnya
-    const performAudioEditing = async (audioFile, action, startTime, endTime) => {
-        const { createWorker } = FFmpeg;
-        const worker = createWorker({ workerPath: 'ffmpeg-all-codecs.js' });
-
-        await worker.load();
-        await worker.write('input.' + fileExtension, audioFile);
-
-        // ...
-
-        await worker.seek(startTime).output('output.mp3');
-
-        // Contoh: Mengembalikan blob audio hasil editing
-        return editedAudioBlob;
+        downloadButton.style.display = 'none';
     };
 });
