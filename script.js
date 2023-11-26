@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Kode audio editing di sini
     const appElement = document.getElementById('app');
 
     // Contoh: Tampilkan formulir pemilihan aksi
@@ -34,7 +33,17 @@ document.addEventListener('DOMContentLoaded', () => {
             // Implementasi kode ini tergantung pada aksi yang dipilih
             // ...
 
-            resultElement.innerHTML = 'Action completed successfully!';
+            // Contoh: Setelah pengeditan audio selesai
+            const editedAudioBlob = await performAudioEditing(audioFile, action);
+
+            // Tampilkan tombol unduh
+            resultElement.innerHTML = `
+                <p>Action completed successfully!</p>
+                <button onclick="downloadEditedAudio()">Download Edited Audio</button>
+            `;
+
+            // Simpan blob audio hasil editing untuk diunduh
+            window.editedAudioBlob = editedAudioBlob;
         } catch (error) {
             console.error('Error:', error);
             resultElement.innerHTML = 'Error processing audio.';
