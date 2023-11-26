@@ -32,9 +32,16 @@ document.addEventListener('DOMContentLoaded', () => {
             // Lakukan pemrosesan audio menggunakan ffmpeg.js
             // Implementasi kode ini tergantung pada aksi yang dipilih
             // ...
+            // Periksa ekstensi file untuk memastikan hanya menerima mp3 dan wav
+            const allowedExtensions = ['mp3', 'wav'];
+            const fileExtension = audioFile.name.split('.').pop().toLowerCase();
+
+            if (!allowedExtensions.includes(fileExtension)) {
+                throw new Error('Invalid audio format. Please upload an MP3 or WAV file.');
+            }
 
             // Contoh: Setelah pengeditan audio selesai
-            const editedAudioBlob = await performAudioEditing(audioFile, action);
+            const editedAudioBlob = await performAudioEditing(audioFile, action, startTime);
 
             // Tampilkan tombol unduh
             resultElement.innerHTML = `
@@ -51,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
             window.editedAudioBlob = editedAudioBlob;
         } catch (error) {
             console.error('Error:', error);
-            resultElement.innerHTML = 'Error processing audio.';
+            resultElement.innerHTML = `Error processing audio: ${error.message}`;
         }
 
         window.playEditedAudio = () => {
@@ -61,9 +68,16 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Contoh: Fungsi untuk melakukan pengeditan audio
-    const performAudioEditing = async (audioFile, action) => {
-        // Lakukan pengeditan audio menggunakan ffmpeg.js
+    const performAudioEditing = async (audioFile, action, startTime) => {
+        const { createWorker } = FFmpeg;
+        const worker = createWorker({ workerPath: 'ffmpeg-all-codecs.js' });
+
+        await worker.load();
+        await worker.write('input.' + fileExtension, audioFile);
+
         // ...
+
+        await worker.seek(startTime).output('output.mp3');
 
         // Contoh: Mengembalikan blob audio hasil editing
         return editedAudioBlob;

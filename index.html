@@ -1,14 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <title>Audio Editor</title>
 </head>
+
 <body>
     <h1>Audio Editor</h1>
-    <div id="app"></div>
+    <div id="app">
+        <label>Select Action:</label>
+        <select id="action">
+            <option value="cut">Cut Audio</option>
+            <option value="merge">Merge Audio</option>
+            <!-- Tambahkan opsi lainnya sesuai kebutuhan -->
+        </select>
+        <br>
+        <label for="startTime">Start Time (seconds):</label>
+        <input type="number" id="startTime" min="0" step="1" value="0">
+        <br>
+        <input type="file" id="audioFile" accept=".mp3, .wav">
+        <br>
+        <input type="button" value="Perform Action" onclick="performAction()">
+        <div id="result"></div>
+    </div>
     <script src="script.js"></script>
+    <script>
+        const resultElement = document.getElementById('result');
+
+        resultElement.innerHTML = `
+            <p>${error.message}</p>
+            <button onclick="clearResult()">Clear Result</button>
+        `;
+
+        window.clearResult = () => {
+            resultElement.innerHTML = '';
+        };
+    </script>
 </body>
+
 </html>
