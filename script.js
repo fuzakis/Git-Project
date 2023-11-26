@@ -40,6 +40,11 @@ document.addEventListener('DOMContentLoaded', () => {
             resultElement.innerHTML = `
                 <p>Action completed successfully!</p>
                 <button onclick="downloadEditedAudio()">Download Edited Audio</button>
+                <button onclick="playEditedAudio()">Play Edited Audio</button>
+                <audio controls id="audioPlayer">
+                    <source src="${URL.createObjectURL(editedAudioBlob)}" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
             `;
 
             // Simpan blob audio hasil editing untuk diunduh
@@ -48,6 +53,11 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error:', error);
             resultElement.innerHTML = 'Error processing audio.';
         }
+
+        window.playEditedAudio = () => {
+            const audioPlayer = document.getElementById('audioPlayer');
+            audioPlayer.play();
+        };
     };
 
     // Contoh: Fungsi untuk melakukan pengeditan audio
