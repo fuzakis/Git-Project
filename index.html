@@ -21,23 +21,26 @@
         <label for="startTime">Start Time (seconds):</label>
         <input type="number" id="startTime" min="0" step="1" value="0">
         <br>
+        <label for="endTime">End Time (seconds):</label>
+        <input type="number" id="endTime" min="0" step="1" value="10">
+        <br>
         <input type="file" id="audioFile" accept=".mp3, .wav">
         <br>
         <input type="button" value="Perform Action" onclick="performAction()">
+        <button id="downloadButton" onclick="downloadEditedAudio()" style="display: none;">Download Edited Audio</button>
         <div id="result"></div>
     </div>
-    <script src="script.js"></script>
-    <script>
-        const resultElement = document.getElementById('result');
+    
 
+    <script src="script.js">
         resultElement.innerHTML = `
-            <p>${error.message}</p>
-            <button onclick="clearResult()">Clear Result</button>
-        `;
+    <p>${error.message}</p>
+    <button onclick="clearResult()">Clear Result</button>
+    `;
 
-        window.clearResult = () => {
-            resultElement.innerHTML = '';
-        };
+    window.clearResult = () => {
+    resultElement.innerHTML = '';
+    };
     </script>
 </body>
 
