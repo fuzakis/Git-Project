@@ -8,7 +8,5 @@ Wildan (Mochammad Wildan Syahputra: 5322600012) <br>
 
 features: 
 -cutting audio
--merge 2 or more audio
--manage audio speed
 -manage audio volume
--manage audio pitch
+-manage fade in/ fade out
