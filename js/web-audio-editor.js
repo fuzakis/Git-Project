@@ -65,7 +65,30 @@ playlist.load([
       logError
     );
   }
+   // Mengaktifkan tombol trim setelah audio dimuat
+   $(".btn-trim-audio").prop("disabled", false);
+
+   // Menangani pemilihan trek audio secara default
+   var track = playlist.tracks[0]; // Ubah indeks trek sesuai dengan kebutuhan
+   track.setCues([{ start: 0, end: track.buffer.duration }]);
+ 
+   // Memperbarui tampilan
+   playlist.draw();
+ 
+   // Mengubah warna seleksi
+   playlist.config.colors.selectionColor = 'rgba(0, 255, 0, 0.3)'; // Ubah warna sesuai keinginan
+ 
+   // Mendengarkan perubahan pemilihan trek audio
+   playlist.getEventEmitter().on("select", function() {
+     var selectedCues = track.cueIn;
+     if (selectedCues.length > 0) {
+       $(".btn-trim-audio").prop("disabled", false);
+     } else {
+       $(".btn-trim-audio").prop("disabled", true);
+     }
+   });
 });
+
 
 // Fungsi untuk menangani pemilihan file audio
 function handleFileSelect(event) {
@@ -89,3 +112,12 @@ function handleFileSelect(event) {
     reader.readAsArrayBuffer(file);
   }
 }
+function handleTrimButtonClick() {
+  // Dapatkan nilai waktu awal dan akhir dari elemen input
+  const startTime = parseFloat($(".audio-start").val());
+  const endTime = parseFloat($(".audio-end").val());
+  // Lakukan trim pada playlist
+  playlist.trim(startTime, endTime);
+}
+$(".btn-trim-audio").on("click", handleTrimButtonClick);
+
