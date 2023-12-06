@@ -96,8 +96,6 @@ function updateTime(time) {
 updateSelect(startTime, endTime);
 updateTime(audioPos);
 
-
-
 /*
 * Code below sets up events to send messages to the playlist.
 */
