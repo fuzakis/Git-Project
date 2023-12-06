@@ -6,7 +6,10 @@ body {
     margin: 0; /* Remove default margin */
     background-image: url('assets/pexelsBG.jpg');
     background-size: cover;
+    height: 800px; /* Adjust the height as needed */
+    overflow-y: auto; /* Enable vertical scrollbar when content exceeds viewport height */
   }
+  
 
 header {
     width: 100%;
