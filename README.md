@@ -10,3 +10,10 @@ features:
 -cutting audio
 -manage audio volume
 -manage fade in/ fade out
+
+
+# Web Jaringan dan Multimedia
+Team Member:
+Fuzakis (Fuad Zaki Nurrahman: 5322600011)
+indaprili ()
+michaeldika27 ()
