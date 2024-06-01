@@ -4,6 +4,30 @@ if (!isset($_SESSION['user_id'])) {
     header('Location: ../login_app/index.php'); // Redirect ke halaman login jika belum login
     exit;
 }
+
+// Database connection
+$host = 'localhost'; // Host database
+$username = 'root'; // Username database
+$password = ''; // Password database
+$dbname = 'login_system'; // Nama database
+
+// Membuat koneksi
+$conn = new mysqli($host, $username, $password, $dbname);
+
+// Cek koneksi
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+$user_id = $_SESSION['user_id'];
+$sql = "SELECT email FROM users WHERE id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$stmt->bind_result($email);
+$stmt->fetch();
+$stmt->close();
+$conn->close();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -51,6 +75,10 @@ if (!isset($_SESSION['user_id'])) {
     <header>
         <ol class="breadcrumb">
             <li><img src="assets/logo.png" alt="Logo" width="100" height="40"></li>
+            <div class="header-right">
+                <span class="user-email"><?php echo htmlspecialchars($email); ?></span>
+                <a href="../login_app/logout.php" class="btn btn-outline-danger">Logout</a>
+            </div>
         </ol>
     </header>
 
@@ -130,7 +158,6 @@ if (!isset($_SESSION['user_id'])) {
                                     <i class="fas fa-download"></i> Download
                                 </button>
                             </div>
-                            <a href="../login_app/logout.php" class="btn btn-outline-danger">Logout</a>
                         </div>
                     </div>
                     <div id="playlist"></div>
