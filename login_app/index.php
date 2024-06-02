@@ -10,7 +10,7 @@
 
 <body>
     <div class="welcome-message">
-        <h1>Selamat Datang</h1>
+        <h1>Welcome</h1>
     </div>
     <form action="login.php" method="post">
         <h2>Login</h2>

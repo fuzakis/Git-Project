@@ -44,9 +44,7 @@ $conn->close();
     <meta name="description" content="Waveform Playlist, the multitrack javascript web audio editor and player. Set audio cue in and cue out. Set linear, exponential, logarithmic, and s-curve fades. Shift audio in time. Zoom in and zoom out on the waveform. Play, stop, pause and seek inside the audio tracks." />
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous" />
-    <link rel="stylesheet" href="/node_modules/waveform-playlist/styles/playlist.css">
-
-    <link rel="stylesheet" href="globals.css" />
+    <link rel="stylesheet" href="playlist.scss" />
     <link rel="stylesheet" href="style.css" />
     
 
@@ -182,7 +180,7 @@ $conn->close();
                             <span class="audio-pos" aria-label="Audio position">00:00:00.0</span>
 
                             <label for="uploadAudio" class="mr-sm-2">Upload Audio</label>
-                            <input type="file" class="form-control mr-sm-2" id="uploadAudio" accept=".mp3, .wav, .ogg">
+                            <input type="file" class="form-control mr-sm-2" id="uploadAudio" name="audioFile" accept=".mp3, .wav, .ogg">
                         </form>
                     </div>
                 </div>

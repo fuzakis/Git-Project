@@ -29,8 +29,8 @@ playlist = WaveformPlaylist.init({
   },
   timescale: true,
   controls: {
-    show: true, //whether or not to include the track controls
-    width: 200 //width of controls in pixels
+    show: true,
+    width: 200
   },
   seekStyle: 'line',
   zoomLevels: [500, 1000, 3000, 5000]
@@ -41,18 +41,7 @@ playlist.load([
     src: 'path/to/default-audio-file.mp3' // Ganti dengan file audio default jika perlu
   }
 ]).then(function () {
-  // can do stuff with the playlist.
-
-  // initialize the WAV exporter.
   playlist.initExporter();
-
-  // Check for File API support
-  if (window.File && window.FileReader && window.FileList && window.Blob) {
-    // Add event listener for file input change
-    document.getElementById('uploadAudio').addEventListener('change', handleFileSelect, false);
-  } else {
-    console.error('The File APIs are not fully supported in this browser.');
-  }
 
   if (navigator.mediaDevices) {
     navigator.mediaDevices.getUserMedia(constraints)
@@ -65,59 +54,84 @@ playlist.load([
       logError
     );
   }
-   // Mengaktifkan tombol trim setelah audio dimuat
-   $(".btn-trim-audio").prop("disabled", false);
 
-   // Menangani pemilihan trek audio secara default
-   var track = playlist.tracks[0]; // Ubah indeks trek sesuai dengan kebutuhan
-   track.setCues([{ start: 0, end: track.buffer.duration }]);
- 
-   // Memperbarui tampilan
-   playlist.draw();
- 
-   // Mengubah warna seleksi
-   playlist.config.colors.selectionColor = 'rgba(0, 255, 0, 0.3)'; // Ubah warna sesuai keinginan
- 
-   // Mendengarkan perubahan pemilihan trek audio
-   playlist.getEventEmitter().on("select", function() {
-     var selectedCues = track.cueIn;
-     if (selectedCues.length > 0) {
-       $(".btn-trim-audio").prop("disabled", false);
-     } else {
-       $(".btn-trim-audio").prop("disabled", true);
-     }
-   });
+  $(".btn-trim-audio").prop("disabled", false);
+
+  var track = playlist.tracks[0];
+  track.setCues([{ start: 0, end: track.buffer.duration }]);
+
+  playlist.draw();
+
+  playlist.config.colors.selectionColor = 'rgba(0, 255, 0, 0.3)';
+
+  playlist.getEventEmitter().on("select", function () {
+    var selectedCues = track.cueIn;
+    if (selectedCues.length > 0) {
+      $(".btn-trim-audio").prop("disabled", false);
+    } else {
+      $(".btn-trim-audio").prop("disabled", true);
+    }
+  });
 });
 
-
-// Fungsi untuk menangani pemilihan file audio
 function handleFileSelect(event) {
   var file = event.target.files[0];
-  
+  console.log('File selected:', file);
+
   if (file) {
-    var reader = new FileReader();
-    reader.onload = function (e) {
-      // Menggunakan URL.createObjectURL untuk mendapatkan URL file yang dapat dimainkan
-      var audioSrc = URL.createObjectURL(file);
-      // Menambahkan audio baru ke dalam playlist
-      playlist.load([
-        {
-          src: audioSrc
-        }
-      ]).then(function () {
-        console.log('File loaded successfully:', file.name);
-        // Lakukan sesuatu setelah file berhasil dimuat, jika perlu
-      });
-    };
-    reader.readAsArrayBuffer(file);
+      var reader = new FileReader();
+      reader.onload = function (e) {
+          var audioSrc = URL.createObjectURL(file);
+          console.log('Audio Source URL:', audioSrc);
+
+          playlist.load([
+              {
+                  src: audioSrc
+              }
+          ]).then(function () {
+              console.log('File loaded successfully:', file.name);
+
+              var formData = new FormData();
+              formData.append('audioFile', file);
+              console.log('Form data prepared:', formData);
+
+              $.ajax({
+                  url: 'upload.php',
+                  type: 'POST',
+                  data: formData,
+                  processData: false,
+                  contentType: false,
+                  success: function (response) {
+                      console.log('File uploaded successfully');
+                  },
+                  error: function (xhr, status, error) {
+                      console.error('Error uploading file:', error);
+                  }
+              });
+          }).catch(function(error) {
+              console.error('Error loading audio file:', error);
+          });
+      };
+      reader.onerror = function(error) {
+          console.error('File reading error:', error);
+      };
+      reader.readAsArrayBuffer(file);
   }
 }
+
+document.getElementById('uploadAudio').addEventListener('change', handleFileSelect, false);
+
+
 function handleTrimButtonClick() {
-  // Dapatkan nilai waktu awal dan akhir dari elemen input
   const startTime = parseFloat($(".audio-start").val());
   const endTime = parseFloat($(".audio-end").val());
-  // Lakukan trim pada playlist
   playlist.trim(startTime, endTime);
 }
+
 $(".btn-trim-audio").on("click", handleTrimButtonClick);
 
+if (window.File && window.FileReader && window.FileList && window.Blob) {
+  document.getElementById('uploadAudio').addEventListener('change', handleFileSelect, false);
+} else {
+  console.error('The File APIs are not fully supported in this browser.');
+}
