@@ -1,54 +1,40 @@
 body {
   display: flex;
-  justify-content: center;
-  /* Center horizontally */
-  align-items: center;
-  /* Center vertically */
-  min-height: 100vh;
-  /* Ensure full viewport height */
-  margin: 0;
-  /* Remove default margin */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  min-height: 100vh; /* Ensure full viewport height */
+  margin: 0; /* Remove default margin */
   background-image: url('assets/pexelsBG.jpg');
   background-size: cover;
-  height: 800px;
-  /* Adjust the height as needed */
-  overflow-y: auto;
-  /* Enable vertical scrollbar when content exceeds viewport height */
+  height: 800px; /* Adjust the height as needed */
+  overflow-y: auto; /* Enable vertical scrollbar when content exceeds viewport height */
 }
-
 
 header {
   width: 100%;
   position: fixed;
   top: 0;
-  z-index: 1000;
+  z-index: 12; /* Ensure header is on top */
 }
 
 .container {
-  background-color: rgba(255, 255, 255, 0.7);
-  /* Adjust the alpha value (0.7 for 70% opacity) */
+  background-color: rgba(255, 255, 255, 0.7); /* Adjust the alpha value (0.7 for 70% opacity) */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 120px;
-  /* Adjust the margin to create space for the fixed header */
-  padding: 40px;
-  /* Increased padding for a larger container */
-  width: 80%;
-  /* Adjust the width as needed */
-  max-width: 900px;
-  /* Optional: Set a maximum width for the container */
-  margin: auto;
-  /* Center the container horizontally */
+  margin-top: 120px; /* Adjust the margin to create space for the fixed header */
+  padding: 40px; /* Increased padding for a larger container */
+  width: 80%; /* Adjust the width as needed */
+  max-width: 900px; /* Optional: Set a maximum width for the container */
+  margin: auto; /* Center the container horizontally */
 }
 
 .post-title {
   font-size: 3em;
   text-align: left;
   width: 1008px;
-  background: linear-gradient(180deg, rgb(44.97, 156.01, 198.17) 0%, rgb(0, 96.98, 133.8) 100%);
-  -webkit-background-clip: text !important;
+  background: linear-gradient(180deg, rgb(44.97, 156.01, 198.17) 0%, rgb(0, 96.98, 133.8) 100%); -webkit-background-clip: text !important;
   background-clip: text;
   -webkit-text-fill-color: transparent;
   font-family: "Poppins-Bold", Helvetica;
@@ -57,12 +43,19 @@ header {
   letter-spacing: 0;
 }
 
+.post-header {
+  text-align: left;
+  width: 500px;
+  margin-bottom: 20px; /* Atur margin bottom sesuai kebutuhan untuk memberikan ruang di bawah header */
+}
+
 .header-right {
   display: flex;
   align-items: center;
   position: absolute;
   top: 10px;
   right: 10px;
+  z-index: 9999; /* Pastikan z-index lebih tinggi dari elemen lain */
 }
 
 .user-email {
@@ -70,3 +63,10 @@ header {
   font-size: 1em;
   color: #333;
 }
+
+.btn-logout {
+  z-index: 1000; /* Tingkatkan z-index */
+  opacity: 1; /* Pastikan tidak transparan */
+  pointer-events: auto; /* Memastikan tombol dapat menerima interaksi */
+}
+

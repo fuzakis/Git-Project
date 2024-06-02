@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <script src="https://kit.fontawesome.com/a88ce4f8a0.js" crossorigin="anonymous"></script>
     <title>Login Page</title>
     <style>
         body {
@@ -67,10 +68,32 @@
         input[type="submit"]:hover {
             background-color: #0056b3;
         }
+
+        .welcome-message {
+            text-align: center;
+            margin-bottom: 20px;
+            margin-top: -50px;
+            /* Menggeser tulisan "Selamat Datang" ke atas */
+            position: relative;
+            /* Menjadikan posisi relatif */
+            z-index: 1;
+            /* Menjadikan z-index lebih tinggi dari elemen lain */
+            margin-left: -20px;
+            margin-right: 200px;
+            /* Menggeser teks ke kiri */
+        }
+
+
+        .welcome-message h1 {
+            color: #007BFF;
+        }
     </style>
 </head>
 
 <body>
+    <div class="welcome-message">
+        <h1>Selamat Datang</h1>
+    </div>
     <form action="login.php" method="post">
         <h2>Login</h2>
         <div>
@@ -81,7 +104,8 @@
         <div class="password-toggle">
             <label>Password</label>
             <input type="password" name="password" id="passwordInput" required>
-            <span class="toggle-password" onclick="togglePasswordVisibility()">(0)</span>
+            <span class="toggle-password" onclick="togglePasswordVisibility()">
+                <i class="fa-regular fa-eye"></i></span>
             <small>Enter your password.</small>
         </div>
         <div>
@@ -97,10 +121,10 @@
             const toggleText = document.querySelector('.toggle-password');
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
-                toggleText.textContent = 'Hide';
+                toggleText.innerHTML = '<i class="fa-regular fa-eye-slash"></i>';
             } else {
                 passwordInput.type = 'password';
-                toggleText.textContent = '(0)';
+                toggleText.innerHTML = '<i class="fa-regular fa-eye"></i>';
             }
         }
     </script>
