@@ -69,4 +69,27 @@ header {
   opacity: 1; /* Pastikan tidak transparan */
   pointer-events: auto; /* Memastikan tombol dapat menerima interaksi */
 }
+#error-message {
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #ffcccc;
+  color: #ff0000;
+  padding: 10px;
+  border-radius: 5px;
+  z-index: 9999; /* Pastikan z-index lebih tinggi dari elemen lain */
+}
+#success-message {
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #cce5ff; /* Ubah warna background sesuai keinginan Anda */
+  color: #0066cc; /* Ubah warna teks sesuai keinginan Anda */
+  padding: 10px;
+  border-radius: 5px;
+  z-index: 9999; /* Pastikan z-index lebih tinggi dari elemen lain */
+}
+
 
