@@ -4,7 +4,7 @@ body {
   align-items: center; /* Center vertically */
   min-height: 100vh; /* Ensure full viewport height */
   margin: 0; /* Remove default margin */
-  background-image: url('assets/pexelsBG.jpg');
+  background-image: url('assets/pexelsBG.gif');
   background-size: cover;
   height: 800px; /* Adjust the height as needed */
   overflow-y: auto; /* Enable vertical scrollbar when content exceeds viewport height */
@@ -18,7 +18,7 @@ header {
 }
 
 .container {
-  background-color: rgba(255, 255, 255, 0.7); /* Adjust the alpha value (0.7 for 70% opacity) */
+  background-color: rgba(255, 255, 255, 1); /* Adjust the alpha value (0.7 for 70% opacity) */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -91,5 +91,63 @@ header {
   border-radius: 5px;
   z-index: 9999; /* Pastikan z-index lebih tinggi dari elemen lain */
 }
+#upload-history {
+  margin-top: 20px;
+}
 
+#upload-history h3 {
+  color: #333;
+}
+
+#upload-history ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+#upload-history li {
+  margin: 5px 0;
+}
+
+#upload-history a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+#upload-history a:hover {
+  text-decoration: underline;
+}
+.breadcrumb {
+  background-color: black; /* Mengubah background breadcrumb menjadi hitam */
+  color: white; /* Mengubah teks breadcrumb menjadi putih */
+  padding: 10px; /* Tambahkan padding untuk ruang */
+  border-radius: 5px; /* Tambahkan border-radius jika diperlukan */
+  list-style: none; /* Menghapus bullet list */
+  display: flex; /* Mengatur elemen breadcrumb dalam satu baris */
+  align-items: center; /* Menyelaraskan elemen secara vertikal */
+}
+
+.breadcrumb li {
+  margin-right: 10px; /* Tambahkan margin kanan untuk spasi antar item */
+}
+
+.breadcrumb .header-right {
+  margin-left: auto; /* Menempatkan elemen header-right ke ujung kanan */
+}
+
+.breadcrumb .user-email {
+  color: white; /* Mengubah warna teks user email menjadi putih */
+}
+
+.breadcrumb .btn-logout {
+  color: white; /* Mengubah warna teks tombol logout menjadi putih */
+  border-color: white; /* Mengubah warna border tombol logout menjadi putih */
+}
+
+.breadcrumb .btn-logout:hover {
+  background-color: white; /* Mengubah background tombol logout saat di-hover */
+  color: black; /* Mengubah warna teks tombol logout saat di-hover */
+}
+.post-header .lead {
+  color: white; /* Mengubah warna teks menjadi putih */
+}
 

@@ -26,9 +26,21 @@ $stmt->fetch();
 $stmt->close();
 $conn->close();
 
+$success_message = ""; // Define $success_message variable
 $uploadOk = 0;
 $error_message = "";
-$success_message = ""; // Define $success_message variable
+
+// Database connection
+require_once 'config.php'; 
+
+// Membuat koneksi
+$conn = new mysqli($host, $username, $password, $dbname);
+
+// Cek koneksi
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
 if (isset($_POST['upload'])) {
     $target_dir = "C:/xampp/htdocs/Git_Project/Uploads/";
     $target_file = $target_dir . basename($_FILES["audioFile"]["name"]);
@@ -41,7 +53,7 @@ if (isset($_POST['upload'])) {
         $uploadOk = 0;
     }
 
-    // Check file size (5MB max)
+    // Check file size (10MB max)
     if ($_FILES["audioFile"]["size"] > 10000000) {
         $error_message .= "Sorry, your file is too large. ";
         $uploadOk = 0;
@@ -58,12 +70,31 @@ if (isset($_POST['upload'])) {
         $error_message .= "Sorry, your file was not uploaded.";
     } else {
         if (move_uploaded_file($_FILES["audioFile"]["tmp_name"], $target_file)) {
-            $success_message = "The file " . htmlspecialchars(basename($_FILES["audioFile"]["name"])) . " has been uploaded successfully.";
+            $success_message = "The file " . htmlspecialchars(basename($_FILES["audioFile"]["name"])) . " has been uploaded.";
+
+            // Save file information to database
+            $stmt = $conn->prepare("INSERT INTO upload_history (user_id, file_path) VALUES (?, ?)");
+            $stmt->bind_param("is", $user_id, $target_file);
+            $stmt->execute();
+            $stmt->close();
         } else {
             $error_message .= "Sorry, there was an error uploading your file.";
         }
     }
 }
+
+// Retrieve upload history
+$history = [];
+if ($stmt = $conn->prepare("SELECT file_path, upload_time FROM upload_history WHERE user_id = ? ORDER BY upload_time DESC")) {
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $stmt->bind_result($file_path, $upload_time);
+    while ($stmt->fetch()) {
+        $history[] = ["file_path" => $file_path, "upload_time" => $upload_time];
+    }
+    $stmt->close();
+}
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -229,6 +260,27 @@ if (isset($_POST['upload'])) {
         <div id="success-message"style="position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); background-color: #cce5ff; color: #0066cc; padding: 10px; border-radius: 5px;">
             <?php echo $success_message; ?>
         </div>
+        <div id="upload-history">
+            <h3>Upload History</h3>
+            <ul>
+                <?php foreach ($history as $entry): ?>
+                    <li>
+                        <a href="<?php echo htmlspecialchars($entry['file_path']); ?>" target="_blank">
+                            <?php echo htmlspecialchars(basename($entry['file_path'])); ?>
+                        </a> - <?php echo htmlspecialchars($entry['upload_time']); ?>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+
+        <div id="success-message">
+            <?php echo $success_message; ?>
+        </div>
+
+        <div id="error-message">
+            <?php echo $error_message; ?>
+        </div>
+    </div>
     </main>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
