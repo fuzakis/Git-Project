@@ -14,6 +14,7 @@ var startTime = 0;
 var endTime = 0;
 var audioPos = 0;
 var downloadUrl = undefined;
+var formatSelect = document.getElementById('format-select');
 var isLooping = false;
 var playoutPromises;
 
@@ -32,9 +33,9 @@ function cueFormatters(format) {
 
   function clockFormat(seconds, decimals) {
     var hours,
-        minutes,
-        secs,
-        result;
+      minutes,
+      secs,
+      result;
 
     hours = parseInt(seconds / 3600, 10) % 24;
     minutes = parseInt(seconds / 60, 10) % 60;
@@ -48,22 +49,22 @@ function cueFormatters(format) {
 
   var formats = {
     "seconds": function (seconds) {
-        return seconds.toFixed(0);
+      return seconds.toFixed(0);
     },
     "thousandths": function (seconds) {
-        return seconds.toFixed(3);
+      return seconds.toFixed(3);
     },
     "hh:mm:ss": function (seconds) {
-        return clockFormat(seconds, 0);   
+      return clockFormat(seconds, 0);
     },
     "hh:mm:ss.u": function (seconds) {
-        return clockFormat(seconds, 1);   
+      return clockFormat(seconds, 1);
     },
     "hh:mm:ss.uu": function (seconds) {
-        return clockFormat(seconds, 2);   
+      return clockFormat(seconds, 2);
     },
     "hh:mm:ss.uuu": function (seconds) {
-        return clockFormat(seconds, 3);   
+      return clockFormat(seconds, 3);
     }
   };
 
@@ -118,111 +119,111 @@ updateTime(audioPos);
 $container.on("click", ".btn-annotations-download", function() {
   ee.emit("annotationsrequest");
 });
-
-$container.on("click", ".btn-loop", function() {
+$container.on("click", ".btn-loop", function () {
   isLooping = true;
   playoutPromises = playlist.play(startTime, endTime);
 });
 
-$container.on("click", ".btn-play", function() {
+$container.on("click", ".btn-play", function () {
   ee.emit("play");
 });
 
-$container.on("click", ".btn-pause", function() {
+$container.on("click", ".btn-pause", function () {
   isLooping = false;
   ee.emit("pause");
 });
 
-$container.on("click", ".btn-stop", function() {
+$container.on("click", ".btn-stop", function () {
   isLooping = false;
   ee.emit("stop");
 });
 
-$container.on("click", ".btn-rewind", function() {
+$container.on("click", ".btn-rewind", function () {
   isLooping = false;
   ee.emit("rewind");
 });
 
-$container.on("click", ".btn-fast-forward", function() {
+$container.on("click", ".btn-fast-forward", function () {
   isLooping = false;
   ee.emit("fastforward");
 });
 
-$container.on("click", ".btn-clear", function() {
+$container.on("click", ".btn-clear", function () {
   isLooping = false;
   ee.emit("clear");
 });
 
-$container.on("click", ".btn-record", function() {
+$container.on("click", ".btn-record", function () {
   ee.emit("record");
 });
 
 //track interaction states
-$container.on("click", ".btn-cursor", function() {
+$container.on("click", ".btn-cursor", function () {
   ee.emit("statechange", "cursor");
   toggleActive(this);
 });
 
-$container.on("click", ".btn-select", function() {
+$container.on("click", ".btn-select", function () {
   ee.emit("statechange", "select");
   toggleActive(this);
 });
 
-$container.on("click", ".btn-shift", function() {
+$container.on("click", ".btn-shift", function () {
   ee.emit("statechange", "shift");
   toggleActive(this);
 });
 
-$container.on("click", ".btn-fadein", function() {
+$container.on("click", ".btn-fadein", function () {
   ee.emit("statechange", "fadein");
   toggleActive(this);
 });
 
-$container.on("click", ".btn-fadeout", function() {
+$container.on("click", ".btn-fadeout", function () {
   ee.emit("statechange", "fadeout");
   toggleActive(this);
 });
 
 //fade types
-$container.on("click", ".btn-logarithmic", function() {
+$container.on("click", ".btn-logarithmic", function () {
   ee.emit("fadetype", "logarithmic");
   toggleActive(this);
 });
 
-$container.on("click", ".btn-linear", function() {
+$container.on("click", ".btn-linear", function () {
   ee.emit("fadetype", "linear");
   toggleActive(this);
 });
 
-$container.on("click", ".btn-scurve", function() {
+$container.on("click", ".btn-scurve", function () {
   ee.emit("fadetype", "sCurve");
   toggleActive(this);
 });
 
-$container.on("click", ".btn-exponential", function() {
+$container.on("click", ".btn-exponential", function () {
   ee.emit("fadetype", "exponential");
   toggleActive(this);
 });
 
 //zoom buttons
-$container.on("click", ".btn-zoom-in", function() {
+$container.on("click", ".btn-zoom-in", function () {
   ee.emit("zoomin");
 });
 
-$container.on("click", ".btn-zoom-out", function() {
+$container.on("click", ".btn-zoom-out", function () {
   ee.emit("zoomout");
 });
 
-$container.on("click", ".btn-trim-audio", function() {
+$container.on("click", ".btn-trim-audio", function () {
   ee.emit("trim");
 });
 
-$container.on("click", ".btn.print", function() {
+$container.on("click", ".btn.print", function () {
   console.log(playlist.getInfo());
 });
 
 $container.on("click", ".btn-download", function () {
-  ee.emit('startaudiorendering', 'wav');
+  var format = formatSelect.value;
+  ee.emit('startaudiorendering', format);
 });
 
 $container.on("click", ".btn-seektotime", function () {
@@ -235,21 +236,21 @@ $container.on("change", ".select-seek-style", function (node) {
 });
 
 //track drop
-$container.on("dragenter", ".track-drop", function(e) {
+$container.on("dragenter", ".track-drop", function (e) {
   e.preventDefault();
   e.target.classList.add("drag-enter");
 });
 
-$container.on("dragover", ".track-drop", function(e) {
+$container.on("dragover", ".track-drop", function (e) {
   e.preventDefault();
 });
 
-$container.on("dragleave", ".track-drop", function(e) {
+$container.on("dragleave", ".track-drop", function (e) {
   e.preventDefault();
   e.target.classList.remove("drag-enter");
 });
 
-$container.on("drop", ".track-drop", function(e) {
+$container.on("drop", ".track-drop", function (e) {
   e.preventDefault();
   e.target.classList.remove("drag-enter");
 
@@ -260,7 +261,7 @@ $container.on("drop", ".track-drop", function(e) {
   }
 });
 
-$container.on("change", ".time-format", function(e) {
+$container.on("change", ".time-format", function (e) {
   format = $timeFormat.val();
   ee.emit("durationformat", format);
 
@@ -268,19 +269,19 @@ $container.on("change", ".time-format", function(e) {
   updateTime(audioPos);
 });
 
-$container.on("input change", ".master-gain", function(e){
+$container.on("input change", ".master-gain", function (e) {
   ee.emit("mastervolumechange", e.target.value);
 });
 
-$container.on("change", ".continuous-play", function(e){
+$container.on("change", ".continuous-play", function (e) {
   ee.emit("continuousplay", $(e.target).is(':checked'));
 });
 
-$container.on("change", ".link-endpoints", function(e){
+$container.on("change", ".link-endpoints", function (e) {
   ee.emit("linkendpoints", $(e.target).is(':checked'));
 });
 
-$container.on("change", ".automatic-scroll", function(e){
+$container.on("change", ".automatic-scroll", function (e) {
   ee.emit("automaticscroll", $(e.target).is(':checked'));
 });
 
@@ -293,12 +294,12 @@ function displayLoadingData(data) {
   $(".loading-data").append(info);
 }
 
-function displayDownloadLink(link) {
+function displayDownloadLink(link, format) {
   var dateString = (new Date()).toISOString();
   var $link = $("<a/>", {
-    'href': 'convert_audio.php?input=' + link,
-    'download': 'waveformplaylist' + dateString + '.wav',
-    'text': 'Download mix ' + dateString,
+    'href': link,
+    'download': 'Edited' + dateString + '.' + format,
+    'text': 'Completed' + dateString,
     'class': 'btn btn-small btn-download-link'
   });
 
@@ -306,8 +307,32 @@ function displayDownloadLink(link) {
   $('.btn-download').after($link);
 }
 
+async function saveFile(data, format) {
+  if ('showSaveFilePicker' in window) {
+    const options = {
+      suggestedName: 'Edited' + (new Date()).toISOString() + '.' + format,
+      types: [{
+        description: 'Audio Files',
+        accept: {
+          'audio/*': ['.' + format],
+        },
+      }],
+    };
 
-
+    try {
+      const handle = await showSaveFilePicker(options);
+      const writable = await handle.createWritable();
+      await writable.write(data);
+      await writable.close();
+    } catch (error) {
+      console.error('Error saving file:', error);
+    }
+  } else {
+    // Fallback untuk browser yang tidak mendukung File System Access API
+    downloadUrl = window.URL.createObjectURL(data);
+    displayDownloadLink(downloadUrl, format);
+  }
+}
 /*
 * Code below receives updates from the playlist.
 */
@@ -315,26 +340,26 @@ ee.on("select", updateSelect);
 
 ee.on("timeupdate", updateTime);
 
-ee.on("mute", function(track) {
+ee.on("mute", function (track) {
   displaySoundStatus("Mute button pressed for " + track.name);
 });
 
-ee.on("solo", function(track) {
+ee.on("solo", function (track) {
   displaySoundStatus("Solo button pressed for " + track.name);
 });
 
-ee.on("volumechange", function(volume, track) {
+ee.on("volumechange", function (volume, track) {
   displaySoundStatus(track.name + " now has volume " + volume + ".");
 });
 
-ee.on("mastervolumechange", function(volume) {
+ee.on("mastervolumechange", function (volume) {
   displaySoundStatus("Master volume now has volume " + volume + ".");
 });
 
 
 var audioStates = ["uninitialized", "loading", "decoding", "finished"];
 
-ee.on("audiorequeststatechange", function(state, src) {
+ee.on("audiorequeststatechange", function (state, src) {
   var name = src;
 
   if (src instanceof File) {
@@ -344,7 +369,7 @@ ee.on("audiorequeststatechange", function(state, src) {
   displayLoadingData("Track " + name + " is in state " + audioStates[state]);
 });
 
-ee.on("loadprogress", function(percent, src) {
+ee.on("loadprogress", function (percent, src) {
   var name = src;
 
   if (src instanceof File) {
@@ -354,26 +379,24 @@ ee.on("loadprogress", function(percent, src) {
   displayLoadingData("Track " + name + " has loaded " + percent + "%");
 });
 
-ee.on("audiosourcesloaded", function() {
+ee.on("audiosourcesloaded", function () {
   displayLoadingData("Tracks have all finished decoding.");
 });
 
-ee.on("audiosourcesrendered", function() {
+ee.on("audiosourcesrendered", function () {
   displayLoadingData("Tracks have been rendered");
 });
 
-ee.on("audiosourceserror", function(e) {
+ee.on("audiosourceserror", function (e) {
   displayLoadingData(e.message);
 });
 
 ee.on('audiorenderingfinished', function (type, data) {
-  if (type == 'wav'){
+  if (['wav', 'mp3', 'ogg'].includes(type)) {
     if (downloadUrl) {
       window.URL.revokeObjectURL(downloadUrl);
     }
-
-    downloadUrl = window.URL.createObjectURL(data);
-    displayDownloadLink(downloadUrl);
+    saveFile(data, type);
   }
 });
 
@@ -381,7 +404,7 @@ ee.on('finished', function () {
   console.log("The cursor has reached the end of the selection !");
 
   if (isLooping) {
-    playoutPromises.then(function() {
+    playoutPromises.then(function () {
       playoutPromises = playlist.play(startTime, endTime);
     });
   }

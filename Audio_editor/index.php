@@ -224,10 +224,16 @@ $conn->close();
                                 </button>
                             </div>
                             <div class="btn-group">
-                                <button type="button" title="Download the current work as Wav file" class="btn btn-download btn-outline-primary">
+                                <button type="button" title="Download the current work" class="btn btn-download btn-outline-primary">
                                     <i class="fas fa-download"></i> Download
                                 </button>
+                                <select id="format-select">
+                                    <option value="wav">WAV</option>
+                                    <option value="mp3">MP3</option>
+                                    <option value="ogg">OGG</option>
+                                </select>
                             </div>
+
                         </div>
                     </div>
                     <div id="playlist"></div>

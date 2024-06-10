@@ -1,15 +1,47 @@
 <?php
-$inputFile = $_GET['input'];
-$outputFile = 'output.wav'; // Nama file output yang dihasilkan
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $format = $_POST['format'];
+    $data = file_get_contents('php://input');
+    
+    // Menyimpan data sementara sebagai file input.wav
+    $inputFile = 'input.wav';
+    file_put_contents($inputFile, $data);
 
-// Panggil ffmpeg untuk melakukan konversi
-exec("ffmpeg -i " . $inputFile . " " . $outputFile);
+    $outputFile = 'output.' . $format;
+    $escapedInputFile = escapeshellarg($inputFile);
+    $escapedOutputFile = escapeshellarg($outputFile);
 
-// Set header untuk mengirim file yang akan di-download
-header("Content-Type: audio/wav");
-header("Content-Disposition: attachment; filename=output.wav");
-readfile($outputFile);
+    // Panggil ffmpeg untuk melakukan konversi
+    exec("ffmpeg -i $escapedInputFile $escapedOutputFile 2>&1", $output, $return_var);
 
-// Hapus file output setelah selesai di-download
-unlink($outputFile);
+    if ($return_var !== 0) {
+        echo "Error executing ffmpeg: " . implode("\n", $output);
+        exit;
+    }
+
+    // Tentukan tipe konten berdasarkan format output
+    $contentType = '';
+    switch ($format) {
+        case 'wav':
+            $contentType = 'audio/wav';
+            break;
+        case 'mp3':
+            $contentType = 'audio/mpeg';
+            break;
+        case 'ogg':
+            $contentType = 'audio/ogg';
+            break;
+        default:
+            die("Unsupported format");
+    }
+
+    // Set header untuk mengirim file yang akan di-download
+    header("Content-Type: " . $contentType);
+    header("Content-Disposition: attachment; filename=" . $outputFile);
+    readfile($outputFile);
+
+    // Hapus file input dan output setelah selesai di-download
+    unlink($inputFile);
+    unlink($outputFile);
+}
 ?>
