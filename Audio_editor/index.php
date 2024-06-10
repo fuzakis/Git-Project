@@ -31,7 +31,7 @@ $uploadOk = 0;
 $error_message = "";
 
 // Database connection
-require_once 'config.php'; 
+require_once 'config.php';
 
 // Membuat koneksi
 $conn = new mysqli($host, $username, $password, $dbname);
@@ -73,8 +73,9 @@ if (isset($_POST['upload'])) {
             $success_message = "The file " . htmlspecialchars(basename($_FILES["audioFile"]["name"])) . " has been uploaded.";
 
             // Save file information to database
+            $relative_file_path = "Uploads/" . basename($_FILES["audioFile"]["name"]); // Relative path
             $stmt = $conn->prepare("INSERT INTO upload_history (user_id, file_path) VALUES (?, ?)");
-            $stmt->bind_param("is", $user_id, $target_file);
+            $stmt->bind_param("is", $user_id, $relative_file_path); // Fix variable name here
             $stmt->execute();
             $stmt->close();
         } else {
@@ -82,6 +83,8 @@ if (isset($_POST['upload'])) {
         }
     }
 }
+
+
 
 // Retrieve upload history
 $history = [];
@@ -257,21 +260,29 @@ $conn->close();
         <div id="error-message" style="position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); background-color: #ffcccc; color: #ff0000; padding: 10px; border-radius: 5px;">
             <?php echo $error_message; ?>
         </div>
-        <div id="success-message"style="position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); background-color: #cce5ff; color: #0066cc; padding: 10px; border-radius: 5px;">
+        <div id="success-message" style="position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); background-color: #cce5ff; color: #0066cc; padding: 10px; border-radius: 5px;">
             <?php echo $success_message; ?>
         </div>
         <div id="upload-history">
             <h3>Upload History</h3>
             <ul>
-                <?php foreach ($history as $entry): ?>
+                <?php foreach ($history as $entry) : ?>
                     <li>
-                        <a href="<?php echo htmlspecialchars($entry['file_path']); ?>" target="_blank">
-                            <?php echo htmlspecialchars(basename($entry['file_path'])); ?>
-                        </a> - <?php echo htmlspecialchars($entry['upload_time']); ?>
+                        <audio controls>
+                            <source src="http://localhost/Git_Project/Uploads/<?php echo htmlspecialchars(basename($entry['file_path'])); ?>" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                        <span>
+                            <a href="http://localhost/Git_Project/Uploads/<?php echo htmlspecialchars(basename($entry['file_path'])); ?>" target="_blank">
+                                <?php echo htmlspecialchars(basename($entry['file_path'])); ?>
+                            </a> - <?php echo htmlspecialchars($entry['upload_time']); ?>
+                        </span>
                     </li>
                 <?php endforeach; ?>
             </ul>
         </div>
+
+
 
         <div id="success-message">
             <?php echo $success_message; ?>
@@ -280,7 +291,7 @@ $conn->close();
         <div id="error-message">
             <?php echo $error_message; ?>
         </div>
-    </div>
+        </div>
     </main>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>

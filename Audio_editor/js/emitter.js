@@ -296,7 +296,7 @@ function displayLoadingData(data) {
 function displayDownloadLink(link) {
   var dateString = (new Date()).toISOString();
   var $link = $("<a/>", {
-    'href': link,
+    'href': 'convert_audio.php?input=' + link,
     'download': 'waveformplaylist' + dateString + '.wav',
     'text': 'Download mix ' + dateString,
     'class': 'btn btn-small btn-download-link'
@@ -305,6 +305,7 @@ function displayDownloadLink(link) {
   $('.btn-download-link').remove();
   $('.btn-download').after($link);
 }
+
 
 
 /*

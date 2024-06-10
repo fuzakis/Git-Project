@@ -78,7 +78,7 @@ header {
   color: #ff0000;
   padding: 10px;
   border-radius: 5px;
-  z-index: 9999; /* Pastikan z-index lebih tinggi dari elemen lain */
+  z-index: 9998; /* Pastikan z-index lebih tinggi dari elemen lain */
 }
 #success-message {
   position: fixed;
@@ -149,5 +149,33 @@ header {
 }
 .post-header .lead {
   color: white; /* Mengubah warna teks menjadi putih */
+}
+.history-container {
+  background-color: rgba(255, 255, 255, 0.7);
+  padding: 20px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.history-container h3 {
+  margin-top: 0;
+}
+
+.history-container ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.history-container li {
+  margin-bottom: 10px;
+}
+
+.history-container a {
+  color: #000; /* Warna hitam untuk link */
+  text-decoration: none;
+}
+
+.history-container a:hover {
+  text-decoration: underline;
 }
 
